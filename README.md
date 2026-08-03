@@ -11,7 +11,22 @@ It includes two complementary tools:
 
 ## Download and install
 
+### Install from Extension Warehouse
+
+Install **SketchUp Mac Icon Repair & Keeper** from Extension Warehouse. The extension includes both the automatic Keeper and the full folder-repair application.
+
+After installation, use SketchUp's **Extensions** menu:
+
+- **Repair current SketchUp Finder icon** repairs the open model immediately.
+- **Repair a folder of SketchUp Finder icons…** opens the included folder-repair application.
+
+The application is launched directly from SketchUp. You do not need to locate it inside the hidden macOS Library folder.
+
+### Download from GitHub
+
 Download **SketchUp Icon Repair for Mac 1.0.1.zip** from the [latest release](../../releases/latest), then unzip it.
+
+The unzipped folder visibly contains both **SketchUp Icon Repair.app** and **SketchUp Icon Keeper.rbz**. You can open the app directly or install the RBZ through Extension Manager.
 
 ### Keep newly saved models discoverable
 
@@ -22,6 +37,8 @@ Download **SketchUp Icon Repair for Mac 1.0.1.zip** from the [latest release](..
 The extension is independently distributed and therefore shown as unsigned by SketchUp. It operates after normal saves; SketchUp backup (`~.skp`) files preserve the custom icon when they are created.
 
 ### Repair an existing model library
+
+If installed from Extension Warehouse, choose **Extensions → Repair a folder of SketchUp Finder icons…** in SketchUp. If downloaded from GitHub, open **SketchUp Icon Repair.app** from the unzipped release folder.
 
 1. Open **SketchUp Icon Repair.app**.
 2. Choose a user, project, or model-library folder — not the whole Macintosh HD.

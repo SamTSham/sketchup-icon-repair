@@ -29,10 +29,12 @@ The tools use the model's existing embedded thumbnail (`meta/model_thumbnail.png
 ## Setup
 
 1. In SketchUp, open **Extension Manager**.
-2. Select **Install Extension** and choose `SketchUp Icon Keeper.rbz`.
-3. Enable **SketchUp Icon Keeper** if asked, then restart SketchUp.
+2. Install **SketchUp Mac Icon Repair & Keeper** from Extension Warehouse, or select **Install Extension** and choose the downloaded RBZ.
+3. Enable the extension if asked, then restart SketchUp.
 
-For an existing library, open the included **SketchUp Icon Repair.app**, select a project or model-library folder, then select **Start Repair**. Do not choose the entire Macintosh HD.
+For an existing library, choose **Extensions → Repair a folder of SketchUp Finder icons…**. The included application opens directly; users do not need to find it inside the hidden macOS Library folder. Select a project or model-library folder, then select **Start Repair**. Do not choose the entire Macintosh HD.
+
+The GitHub release also provides a normal ZIP containing the visible **SketchUp Icon Repair.app** and the RBZ side by side.
 
 ## Compatibility
 

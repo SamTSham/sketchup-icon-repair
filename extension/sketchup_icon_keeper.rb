@@ -2,9 +2,9 @@ require 'sketchup.rb'
 require 'extensions.rb'
 
 module SketchUpIconKeeper
-  extension = SketchupExtension.new('SketchUp Icon Keeper', 'sketchup_icon_keeper/loader')
-  extension.description = 'Restores the Finder icon from a saved SketchUp model’s embedded thumbnail.'
-  extension.version = '0.1.2'
-  extension.creator = 'SketchUp Icon Keeper'
+  extension = SketchupExtension.new('Mac SKP Icon Repair & Keeper', 'sketchup_icon_keeper/loader')
+  extension.description = 'Restores embedded model previews as Finder icons after saves or across an entire folder.'
+  extension.version = '0.1.5'
+  extension.creator = 'Sam Madwar'
   Sketchup.register_extension(extension, true)
 end

@@ -63,6 +63,8 @@ The historical `v1.0.1` release is the older standalone-app distribution. Its nu
 
 Please report problems or improvement ideas in [Issues](../../issues).
 
+If this free tool helps your work, you can [buy me a coffee on Ko-fi](https://ko-fi.com/samtsham). Contributions are entirely optional and help keep all three plugins free and maintained.
+
 ## License and trademarks
 
 Released under the [Apache License 2.0](LICENSE). SketchUp is a trademark of Trimble Inc. This independent project is not affiliated with or endorsed by Trimble.

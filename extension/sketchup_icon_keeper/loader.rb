@@ -6,13 +6,14 @@ module SketchUpIconKeeper
   module_function
 
   def helper_path
-    File.join(__dir__, 'set_finder_icon')
+    File.join(__dir__, 'set_finder_icon.js')
+  end
+
+  def worker_path
+    File.join(__dir__, 'repair_sketchup_icons.py')
   end
 
   def install
-    # Extension installers do not always retain the executable bit from an
-    # RBZ archive, so make the bundled macOS helper runnable on first load.
-    File.chmod(0o755, helper_path) if File.file?(helper_path)
     @observed_models ||= {}
     attach_model(Sketchup.active_model)
     @app_observer ||= AppObserver.new
@@ -34,6 +35,9 @@ module SketchUpIconKeeper
 
     UI.menu('Extensions').add_item('Repair current SketchUp Finder icon') do
       refresh(Sketchup.active_model.path)
+    end
+    UI.menu('Extensions').add_item('Repair a folder of SketchUp Finder icons…') do
+      repair_folder
     end
     @menu_added = true
   end
@@ -64,12 +68,68 @@ module SketchUpIconKeeper
     return unless output.b.start_with?("\x89PNG\r\n\x1a\n".b)
 
     File.binwrite(thumbnail, output)
-    system(helper_path, thumbnail, path)
+    _output, diagnostic, status = Open3.capture3(
+      '/usr/bin/osascript', '-l', 'JavaScript', helper_path, thumbnail, path
+    )
+    puts "Mac SKP Icon Repair & Keeper: #{diagnostic}" unless status.success?
     File.utime(original.atime, original.mtime, path)
   rescue StandardError => error
     puts "SketchUp Icon Keeper: #{error.message}"
   ensure
     File.delete(thumbnail) if thumbnail && File.exist?(thumbnail)
+  end
+
+  def repair_folder
+    if @repair_pid && process_running?(@repair_pid)
+      UI.messagebox('A folder repair is already running. Its progress is in the DeleteMe report in the selected folder.')
+      return
+    end
+
+    folder = UI.select_directory(title: 'Choose a SketchUp model folder to repair')
+    return unless folder
+
+    expanded = File.expand_path(folder)
+    if unsafe_folder?(expanded)
+      UI.messagebox('Please choose a project, user, or model-library folder rather than the whole disk or a system folder.')
+      return
+    end
+
+    python = '/usr/bin/python3'
+    unless File.executable?(python)
+      UI.messagebox('Folder repair requires Python 3 at /usr/bin/python3. The current-model repair remains available.')
+      return
+    end
+
+    report = File.join(expanded, 'SketchUp Icon Repair - DeleteMe.txt')
+    File.open(report, 'w') do |file|
+      file.puts 'Mac SKP Icon Repair & Keeper'
+      file.puts "Started: #{Time.now}"
+      file.puts "Folder: #{expanded}"
+      file.puts
+    end
+
+    @repair_pid = Process.spawn(
+      python, '-u', worker_path, expanded, '--apply',
+      out: [report, 'a'], err: [:child, :out]
+    )
+    Process.detach(@repair_pid)
+    UI.messagebox("Folder repair has started in the background.\n\nProgress is written to:\n#{report}\n\nThe report can be safely deleted afterwards.")
+  rescue StandardError => error
+    UI.messagebox("Folder repair could not start:\n#{error.message}")
+  end
+
+  def process_running?(pid)
+    Process.kill(0, pid)
+    true
+  rescue Errno::ESRCH
+    false
+  rescue Errno::EPERM
+    true
+  end
+
+  def unsafe_folder?(folder)
+    unsafe = ['/', '/System', '/Library', '/Applications', '/private', '/usr', '/bin', '/sbin']
+    unsafe.include?(folder)
   end
 
   def skp_path?(path)
